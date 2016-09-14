@@ -7,15 +7,19 @@ describe ('GenericMock.store', () => {
 })
 
 describe ('GenericMock.setEntry', () => {
-    it ('should return operational methods', () => {
+    it ('should register the entries', () => {
         const mockEntryID = 'mockEntryID'
-        const mockID = 'mockID'
-        const original = 'original'
+        const mockID1 = 'mockID1'
+        const mockID2 = 'mockID2'
+        const original1 = 'original1'
+        const original2 = 'original2'
         const result = {}
         result[mockEntryID] = {}
-        result[mockEntryID][mockID] = { original: original, fake: original }
+        result[mockEntryID][mockID1] = { original: original1, fake: original1 }
+        result[mockEntryID][mockID2] = { original: original2, fake: original2 }
         GenericMock.store = {}
-        GenericMock.setEntry(mockEntryID, mockID, original)
+        GenericMock.setEntry(mockEntryID, mockID1, original1)
+        GenericMock.setEntry(mockEntryID, mockID2, original2)
         expect(GenericMock.store).toEqual(result)
     })
 })

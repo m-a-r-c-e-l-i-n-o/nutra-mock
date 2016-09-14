@@ -1,7 +1,9 @@
 const Mock = {
     store: {},
     setEntry(entryID, id, original) {
-        this.store[entryID] = {}
+        if (!this.store[entryID]) {
+            this.store[entryID] = {}
+        }
         this.store[entryID][id] = { original, fake: original }
     },
     getEntry(entryID) {

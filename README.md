@@ -1,7 +1,13 @@
 # nutra-mock
-The "nutra-mock" module is a mocking library for the "[N.U.T.R.A.](https://github.com/m-a-r-c-e-l-i-n-o/nutra)" unit test runner. Currently, it allows for mocking of all named imports and constants in the main execution context of a valid ES6 module file. It does this by statically analyzing the file with the [es6-global-parser]() module and transforms the relevant globals in the deeper contexts into objects whose properties can changed at any time — essentially allowing you to mock just about anything!
+The "nutra-mock" module is a mocking library for the "[N.U.T.R.A.](https://github.com/m-a-r-c-e-l-i-n-o/nutra)" unit test runner. Currently, it allows for mocking of all global imports and constants in the main execution context of a valid ES6 module file. It does this by statically analyzing the file and transforms the relevant globals in the deeper contexts into objects whose properties can be changed at any time — essentially allowing you to mock just about anything!
 
-**This is working, but do to time constraits, it's still lacking in the sourcemap department. Expect them to be skewed a bit (not by much, though). Sourcemap generation will be intergrated soon.**
+**This is working, but do to time constraits, it's still lacking.**
+**Known issues:**
+- The file sources is being modified, but no sourcemaps are being generated at the moment. Expect your debugging to be a bit skewed.
+- There cannot be deep context or object declarations with the same variable names as the globals, this will screw things up. To get around this, try making the global variable
+names unique on the page (i.e. maybe capitilize them all?).
+- This whole thing is still fairly experimental, put together with some minor ast tree crawling and regexes. It really needs to be all ast manipulations, both for performance and reliability. Expect these bugs to be taken care of if this approach turns out to be a reasonable idea.
+
 
 ## Installation
 ```bash

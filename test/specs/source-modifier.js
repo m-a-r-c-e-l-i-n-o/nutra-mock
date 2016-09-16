@@ -1,12 +1,14 @@
-import SourceModifier from '../../src/source-modifier.js'
+import fs from 'fs'
+import path from 'path'
+import sourceModifier from '../../src/source-modifier.js'
 
-const Source = `
-import Path from 'path'
+const source = `
+import path from 'path'
 import * as All from 'everything'
 import Complex, { someMethod as TheMethod, complexMethod, store } from 'complex'
 
 const Bar = () => {
-    const Path = 'hey'
+    const path = 'hey'
     Foo()
     const closure = () => {
         complexMethod()
@@ -21,52 +23,75 @@ const Bar = () => {
 const Foo = () => {
     All.helloWorld()
     TheMethod()
-    return Path.join('/Complex/hello', 'Complex')
+    return path.join('/Complex/hello', 'Complex')
 }
 
+const Deps = {
+    path,
+    All
+}
+
+const MoreDeps = {
+    ...Deps
+}
+
+let path = All.path
+
 export default Bar
-export { Foo, Path }
+export { Foo, path }
 `
 
-const Output = `
-import Path from 'path'
-import * as All from 'everything'
-import Complex, { someMethod as TheMethod, complexMethod, store } from 'complex'
-;NutraMock.setEntry(".path/to/store/file.js", "Path", Path)
-;NutraMock.setEntry(".path/to/store/file.js", "All", All)
-;NutraMock.setEntry(".path/to/store/file.js", "Complex", Complex)
-;NutraMock.setEntry(".path/to/store/file.js", "TheMethod", TheMethod)
-;NutraMock.setEntry(".path/to/store/file.js", "complexMethod", complexMethod)
-;NutraMock.setEntry(".path/to/store/file.js", "store", store);
-
+const output = `
+import path from 'path';
+import * as All from 'everything';
+import Complex, {
+    someMethod as TheMethod,
+    complexMethod,
+    store
+} from 'complex';
+NutraMock.setEntry('path/to/store/file.js', 'path', path);
+NutraMock.setEntry('path/to/store/file.js', 'All', All);
+NutraMock.setEntry('path/to/store/file.js', 'Complex', Complex);
+NutraMock.setEntry('path/to/store/file.js', 'TheMethod', TheMethod);
+NutraMock.setEntry('path/to/store/file.js', 'complexMethod', complexMethod);
+NutraMock.setEntry('path/to/store/file.js', 'store', store);
 const Bar = () => {
-    const Path = 'hey'
-    NutraMock.store[".path/to/store/file.js"]["Foo"].fake()
+    const path = 'hey';
+    NutraMock.store['path/to/store/file.js']['Foo'].fake();
     const closure = () => {
-        NutraMock.store[".path/to/store/file.js"]["complexMethod"].fake()
+        NutraMock.store['path/to/store/file.js']['complexMethod'].fake();
         const closureOfAClosure = () => {
-            NutraMock.store[".path/to/store/file.js"]["Complex"].fake()
-        }
-        return closureOfAClosure
-    }
-    return closure
-};NutraMock.setEntry(".path/to/store/file.js", "Bar", Bar);
-
+            NutraMock.store['path/to/store/file.js']['Complex'].fake();
+        };
+        return closureOfAClosure;
+    };
+    return closure;
+};
+NutraMock.setEntry('path/to/store/file.js', 'Bar', Bar);
 const Foo = () => {
-    NutraMock.store[".path/to/store/file.js"]["All"].fake.helloWorld()
-    NutraMock.store[".path/to/store/file.js"]["TheMethod"].fake()
-    return NutraMock.store[".path/to/store/file.js"]["Path"].fake.join('/Complex/hello', 'Complex')
-};NutraMock.setEntry(".path/to/store/file.js", "Foo", Foo);
-
-export default Bar
-export { Foo, Path }
-
+    All.helloWorld();
+    NutraMock.store['path/to/store/file.js']['TheMethod'].fake();
+    return path.join('/Complex/hello', 'Complex');
+};
+NutraMock.setEntry('path/to/store/file.js', 'Foo', Foo);
+const Deps = {
+    path: NutraMock.store['path/to/store/file.js']['path'].fake,
+    All: NutraMock.store['path/to/store/file.js']['All'].fake
+};
+NutraMock.setEntry('path/to/store/file.js', 'Deps', Deps);
+const MoreDeps = { ...Deps };
+NutraMock.setEntry('path/to/store/file.js', 'MoreDeps', MoreDeps);
+let path = All.path;
+export default Bar;
+export {
+    Foo,
+    path
+};
 `
-describe ('SourceModifier', () => {
+describe ('sourceModifier', () => {
     // pressed for time, will write better tests as time allows
-    it ('Should do its thing', () => {
+    it ('should do its thing', () => {
         const filename = 'path/to/store/file.js'
-        SourceModifier(Source.trim(), filename)
-        // expect(SourceModifier(Source.trim(), filename)).toBe(Output.trim())
+        expect(sourceModifier(source.trim(), filename).code).toBe(output)
     })
 })

@@ -1,6 +1,6 @@
 {
   "name": "nutra-mock",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "The \"nutra-mock\" module is a mocking library for the \"[N.U.T.R.A.](https://github.com/m-a-r-c-e-l-i-n-o/nutra)\" unit test runner.",
   "main": "dist/nutra-mock.js",
   "scripts": {

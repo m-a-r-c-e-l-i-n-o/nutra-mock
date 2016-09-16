@@ -88,9 +88,9 @@ const Bar = () => {
 };
 NutraMock.setEntry('path/to/store/file.js', 'Bar', Bar);
 const Foo = () => {
-    All.helloWorld();
+    NutraMock.store['path/to/store/file.js']['All'].fake.helloWorld();
     NutraMock.store['path/to/store/file.js']['TheMethod'].fake();
-    return path.join('/Complex/hello', 'Complex');
+    return NutraMock.store['path/to/store/file.js']['path'].fake.join('/Complex/hello', 'Complex');
 };
 NutraMock.setEntry('path/to/store/file.js', 'Foo', Foo);
 const Bar = () => {
@@ -117,7 +117,7 @@ const Deps = {
 NutraMock.setEntry('path/to/store/file.js', 'Deps', Deps);
 const MoreDeps = { ...Deps };
 NutraMock.setEntry('path/to/store/file.js', 'MoreDeps', MoreDeps);
-let path = All.path;
+let path = NutraMock.store['path/to/store/file.js']['All'].fake.path;
 export default Bar;
 export {
     Foo,

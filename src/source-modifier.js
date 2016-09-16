@@ -172,7 +172,8 @@ const SourceModifier = (source, filename) => {
                 topNodes[node.name]) {
                 if (parent.type === 'ExperimentalSpreadProperty')
                     return
-                if (parent.type === 'MemberExpression' && !parent.computed)
+                if (parent.type === 'MemberExpression' && !parent.computed &&
+                    parent.object !== node)
                     return
                 if (parent.type === 'FunctionDeclaration')
                     return

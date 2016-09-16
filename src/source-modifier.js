@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import * as escope from 'escope'
 import espree from 'espree'
 import estraverse from 'estraverse'
 import escodegen from 'escodegen'
@@ -23,6 +24,7 @@ const espreeConfig = {
     sourceType: 'module',
     // specify additional language features
     ecmaFeatures: {
+        modules: true,
         // enable JSX parsing
         jsx: true,
         // enable return in global scope
@@ -148,12 +150,26 @@ const SourceModifier = (source, filename) => {
 
     // replace relevant nodes in deep execution contexts
     const topNodes = Object.assign({}, topImportNodes, topConstantNodes)
+    const scopeManager = escope.analyze(ast, espreeConfig)
+    const currentScopeNodes = {}
     estraverse.replace(ast, {
-        enter: function(node, parent) {
-            if (node.type === 'Identifier' && !node[namespace]) {
-                if (!topNodes[node.name]) {
-                    return
-                }
+        enter: (node, parent) => {
+            if (/Function/.test(node.type)) {
+                scopeManager.acquire(node).variables.forEach(
+                    node => currentScopeNodes[node.name] = true
+                )
+            }
+        },
+        leave: (node, parent) => {
+            if (/Function/.test(node.type)) {
+                scopeManager.acquire(node).variables.forEach(
+                    node => currentScopeNodes[node.name] = false
+                )
+            }
+            if (node.type === 'Identifier' &&
+                !node[namespace] &&
+                !currentScopeNodes[node.name] &&
+                topNodes[node.name]) {
                 if (parent.type === 'ExperimentalSpreadProperty')
                     return
                 if (parent.type === 'MemberExpression' && !parent.computed)

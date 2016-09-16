@@ -1,9 +1,6 @@
 # nutra-mock
 The "nutra-mock" module is a mocking library for the "[N.U.T.R.A.](https://github.com/m-a-r-c-e-l-i-n-o/nutra)" unit test runner. Currently, it allows for mocking of all global imports and constants in the main execution context of a valid ES6 module file. It does this by statically analyzing the file with [Espree 3+](https://github.com/eslint/espree) and transforms the relevant globals in the deeper contexts into objects whose properties can be changed at any time — essentially allowing you to mock just about anything!
 
-This is working, but do to time constraits, it's still lacking. Known issues:
-There cannot be deep context variables with the same variable names as the globals, this will screw things up. To get around this, try making the global variable names unique on the page (i.e. maybe capitilize them all?).
-
 ## Installation
 ```bash
 npm install --save-dev nutra nutra-mock
@@ -46,7 +43,8 @@ In your tests:
 import Path from 'path'
 import Foo, { Bar } from '../../src/foo.js'
 
-const Mock = NutraMock.getEntry('./src/some-file.js') // Path is relative to cwd
+const Mock = NutraMock.getEntry('src/some-file.js')
+// THe path is relative to current working directory, do not include "./" or "."
 
 describe ('Foo', () => {
     it ('should initially not mock Foo\'s "Path" dependency', () => {

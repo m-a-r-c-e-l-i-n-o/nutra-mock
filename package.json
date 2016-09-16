@@ -1,6 +1,6 @@
 {
   "name": "nutra-mock",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "The \"nutra-mock\" module is a mocking library for the \"[N.U.T.R.A.](https://github.com/m-a-r-c-e-l-i-n-o/nutra)\" unit test runner.",
   "main": "dist/nutra-mock.js",
   "scripts": {
@@ -37,8 +37,9 @@
   },
   "dependencies": {
     "escodegen": "github:m-a-r-c-e-l-i-n-o/escodegen",
+    "escope": "^3.6.0",
     "espree": "^3.1.7",
-    "estraverse": "github:m-a-r-c-e-l-i-n-o/estraverse",
+    "estraverse": "github:m-a-r-c-e-l-i-n-o/estraverse#master",
     "fs-extra": "^0.30.0",
     "inline-source-map-comment": "^1.0.5"
   }

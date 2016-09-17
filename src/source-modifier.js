@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import * as escope from 'escope'
 import espree from 'espree'
-import estraverse from 'estraverse'
+import estraverse from 'experimental-estraverse'
 import escodegen from 'escodegen'
 import inlineSourceMapComment from'inline-source-map-comment'
 

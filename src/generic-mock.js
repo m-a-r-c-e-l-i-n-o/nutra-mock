@@ -9,7 +9,7 @@ const Mock = {
     getEntry(entryID) {
         const entry = this.store[entryID]
         return {
-            get: (id) => { this.getByID(entry, id) },
+            get: (id) => this.getByID(entry, id),
             set: (id, target) => { this.setMock(entry, id, target) },
             reset: (id) => { this.resetMock(entry, id) }
         }

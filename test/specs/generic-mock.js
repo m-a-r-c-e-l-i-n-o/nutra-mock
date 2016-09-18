@@ -85,6 +85,21 @@ describe ('GenericMock.getEntry\'s get method', () => {
         expect(GenericMock.getByID).toHaveBeenCalledWith(mockEntry, mockID)
         GenericMock.getByID = originalGetByID
     })
+    it ('should return the mock item', () => {
+        const mockEntryID = 'mockEntryID'
+        const mockEntry = 'mockEntry'
+        const mockID = 'mockID'
+        const mockValue = 'mockValue'
+        const originalGetByID = GenericMock.getByID
+        GenericMock.getByID = jasmine.createSpy('getByID').and
+        .returnValue(mockValue)
+        GenericMock.store = {}
+        GenericMock.store[mockEntryID] = {}
+        GenericMock.store[mockEntryID][mockID] = mockValue
+        const getMethod = GenericMock.getEntry(mockEntryID).get
+        expect(getMethod(mockID)).toBe(mockValue)
+        GenericMock.getByID = originalGetByID
+    })
 })
 
 describe ('GenericMock.getByID method', () => {

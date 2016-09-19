@@ -177,7 +177,7 @@ const SourceModifier = (source, filename) => {
                     return
                 if (parent.type === 'FunctionDeclaration')
                     return
-                if (parent.type === 'VariableDeclarator')
+                if (parent.type === 'VariableDeclarator' && parent.id === node)
                     return
                 if (parent.type === 'Property') {
                     if (parent.shorthand) {

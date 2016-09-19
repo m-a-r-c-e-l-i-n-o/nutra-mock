@@ -41,7 +41,7 @@ const Fuzz = () => {
     const Three = () => {
         Foo()
     }
-    const hi = 'man'
+    const hi = Bar
 }
 
 const Deps = {
@@ -107,7 +107,7 @@ const Fuzz = () => {
     const Three = () => {
         NutraMock.store['path/to/store/file.js']['Foo'].fake();
     };
-    const hi = 'man';
+    const hi = NutraMock.store['path/to/store/file.js']['Bar'].fake;
 };
 NutraMock.setEntry('path/to/store/file.js', 'Fuzz', Fuzz);
 const Deps = {

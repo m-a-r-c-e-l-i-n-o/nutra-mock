@@ -210,8 +210,11 @@ const SourceModifier = (source, filename) => {
     let spliceArgs = [afterImportNodeIndex, 0].concat(importSetEntryMethods)
     Array.prototype.splice.apply(ast.body, spliceArgs)
 
+    // start processing the const declarations after the import registrations
+    afterImportNodeIndex += importSetEntryMethods.length
+
     // insert the constant mock registrations after each constant node
-    for (let node, i = (afterImportNodeIndex * 2); i < ast.body.length; i++) {
+    for (let node, i = afterImportNodeIndex; i < ast.body.length; i++) {
         node = ast.body[i]
         if (node.type === 'ExportNamedDeclaration') {
             if (node.declaration && typeof node.declaration === 'object') {

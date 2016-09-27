@@ -125,10 +125,27 @@ export {
 };
 `
 
+const unnamedImportSource = `
+import 'path'
+const Bar = () => {}
+`
+
+const unnamedImportOutput = `
+import 'path';
+const Bar = () => {
+};
+NutraMock.setEntry('path/to/store/file.js', 'Bar', Bar);
+`
+
 describe ('sourceModifier', () => {
     // pressed for time, will write better tests as time allows
     it ('should do its thing', () => {
         const filename = 'path/to/store/file.js'
         expect(sourceModifier(source.trim(), filename).code).toBe(output.trim())
+    })
+    it ('should handle unnamed imports', () => {
+        const filename = 'path/to/store/file.js'
+        expect(sourceModifier(unnamedImportSource.trim(), filename).code)
+        .toBe(unnamedImportOutput.trim())
     })
 })
